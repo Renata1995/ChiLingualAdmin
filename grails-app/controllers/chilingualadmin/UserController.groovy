@@ -5,7 +5,8 @@ import grails.plugin.springsecurity.annotation.Secured
 @Secured("permitAll")
 class UserController {
 
-    def index() { }
+   def restClient
+	def index() { }
 	def create(){
 		User userInstance=new User()
 		render view:"create",model:[userInstance:userInstance]
@@ -21,12 +22,12 @@ class UserController {
 		def admin=Role.findByAuthority("ROLE_ADMIN")
 		UserRole.create(userInstance,admin,true)
 
-		request.withFormat {
-			form multipartForm {
-				flash.message = "The new account is created. Please log in."
-				redirect controller:"login",action:"auth",method:"GET"
-				}
-			'*' { respond userInstance, [status: CREATED] }
+		def response = restClient.post(path:'user/save'){
+			urlenc username:userInstance.username,password:userInstance.password
 		}
+		println response
+		flash.message = "The new account is created. Please log in."
+		redirect controller:"login",action:"auth",method:"GET"
+
 	}
 }
