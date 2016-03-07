@@ -52,5 +52,4 @@ class User implements Serializable {
 	static mapping = {
 		password column: '`password`'
 	}
-	static hasMany=[courses:chilingualadmin.Course]
 }
