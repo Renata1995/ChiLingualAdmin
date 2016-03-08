@@ -5,7 +5,7 @@ import grails.plugin.springsecurity.annotation.Secured
 @Secured("permitAll")
 class UserController {
 
-   def restClient
+	def restClient
 	def index() { }
 	def create(){
 		User userInstance=new User()
