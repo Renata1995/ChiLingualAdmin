@@ -16,7 +16,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link controller="lesson" action="show" id="${lessonInstance.id}">Lesson</g:link>
+				<li><g:link controller="lesson" action="show" params="[lessonNo:"${lessonNo}",courseCode:"${courseCode}"]">Lesson</g:link>
 				<li><a class="create" id="new-question">New Question</a></li>
 			</ul>
 		</div>
@@ -34,9 +34,9 @@
 				height:$(window).height()*0.8,
 				autoOpen:false,
 				close:function(event,ui){
-					var id="${lessonInstance.id}";
 					$.ajax({
-						url:"/ChineseWeb/question/_refreshList/"+id,
+						url:"/ChiLingualAdmin/question/_refreshList/",
+						data:{lessonNo:${lessonNo},courseCode:${courseCode}},
 						success:function(data,textStatus){
 								$("#list-question").html(data);
 							},
@@ -46,8 +46,8 @@
 				});
 			$("#new-question").click(function(){
 				$.ajax({
-					url:"/ChineseWeb/question/create",
-					data:{lessonId:"${lessonInstance.id}"},
+					url:"/ChiLingualAdmin/question/create",
+					data:{lessonNo:${lessonNo},courseCode:${courseCode}},
 					success:function(data,textStatus){
 							$("#questionDialog").html(data);
 						},

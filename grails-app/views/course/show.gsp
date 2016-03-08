@@ -26,14 +26,6 @@
 	</div>
 	<!-- nav -->
 
-	<g:hasErrors bean="${course}">
-	<ul class="errors" role="alert">
-		<g:eachError bean="${course}" var="error">
-		<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>${error.field} has error</li>
-		</g:eachError>
-	</ul>
-	</g:hasErrors>
-
 	<div id="show-course" class="content scaffold-show" role="main">
 
 		<h1>
@@ -49,78 +41,79 @@
 		<!-- Basic Information -->
 		<ol class="property-list course">
 
-			
-				<li class="fieldcontain">Title: ${course['courseTitle']}
 
-				</li>
-			
+			<li class="fieldcontain">Title: ${course['courseTitle']}
 
-			
-				<li class="fieldcontain">Course Code: ${course['courseCode']}</li>
-			
+			</li>
+
+
+
+			<li class="fieldcontain">Course Code: ${course['courseCode']}</li>
+
 		</ol>
 
 
 
 		<!-- Lesson Table -->
-		
-			<table id="tableLessons">
 
-				<thead>
-					<tr>
+		<table id="tableLessons">
 
-						<th>Lesson Number</th>
+			<thead>
+				<tr>
 
-						<th>Lesson Title</th>
+					<th>Lesson Number</th>
 
-						<th></th>
+					<th>Lesson Title</th>
+
+					<th></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<g:each in="${lessons}" status="i" var="lesson">
+					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+
+						<td>
+							${lesson['lessonNo']}
+						</td>
+
+						<td><g:link action="show" controller="lesson"
+								id="${lesson['lessonNo']}">
+								${lesson['lessonTitle']}
+							</g:link></td>
+
+						<td>
+							<fieldset class="buttons">
+								<g:remoteLink update="lessonDialogOnCourse" class="edit" params="[lessonNo:"
+									${lesson['lessonNo']}",lessonTitle:"${lesson['lessonTitle']}"]" action="edit"
+									controller="lesson">
+									<g:message code="default.button.edit.label" default="Edit" />
+								</g:remoteLink>
+								<g:link controller="lesson" class="delete" action="delete" params="[lessonNo:"
+									${lesson['lessonNo']}"]" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+									onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+							</fieldset>
+						</td>
 
 					</tr>
-				</thead>
-				<tbody>
-					<g:each in="${lessonList}" status="i" var="lesson">
-						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+				</g:each>
+			</tbody>
+		</table>
 
-							<td>
-									${lesson['lessonNo']}
-								</td>
-
-							<td><g:link action="show" controller="lesson"
-									id="${lesson['id']}">
-								${lesson['lessonTitle']}
-								</g:link>
-							</td>
-
-							<td><g:form controller="lesson" id="${lesson['id']}"
-									method="DELETE">
-
-									<input type="button" class="edit editLessonIndex" id="${lesson['id']}" value="Edit">
-									
-									<g:actionSubmit class="delete" action="delete"
-										value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-										onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-
-								</g:form></td>
-
-						</tr>
-					</g:each>
-				</tbody>
-			</table>
-		
 
 		<div id="lessonDialogOnCourse"></div>
 
 		<!-- Edit or delete the course -->
-		<g:form url="[resource:course, action:'delete']" method="DELETE">
-			<fieldset class="buttons">
-				<g:remoteLink class="edit" update="show-course" action="edit" params="[courseCode:"${course.get('courseCode')}"]">
-					<g:message code="default.button.edit.label" default="Edit" />
-				</g:remoteLink>
-				<g:actionSubmit class="delete" action="delete"
-					value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-					onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-			</fieldset>
-		</g:form>
+		<fieldset class="buttons">
+			<g:link class="edit" params="[courseCode:"
+				${course['courseCode']}",courseTitle:"${course['courseTitle']}"]" action="edit"
+				controller="course">
+				<g:message code="default.button.edit.label" default="Edit" />
+			</g:link>
+			<g:link controller="course" class="delete" action="delete" params="[courseCode:"
+				${course['courseCode']}"]" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+				onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+		</fieldset>
 
 
 	</div>
@@ -135,8 +128,8 @@
 						});
 					$("#newLesson").click(function(){
 						$.ajax({
-							url : '/ChineseWeb/lesson/create',
-							data:{courseId:${course['id']}},
+							url : '/ChiLingualAdmin/lesson/create',
+							data:{courseCode:${course['courseCode']}},
 							success: function(data, textStatus){
 								$("#lessonDialogOnCourse").html(data);
 								$("#lessonDialogOnCourse").dialog("open");
@@ -145,10 +138,10 @@
 							});
 						
 							});
-					$("#tableLessons").on("click",".editLessonIndex",function(){
+					/*$("#tableLessons").on("click",".editLessonIndex",function(){
 						var id=$(this).prop("id");
 						$.ajax({
-							url:"/ChineseWeb/lesson/edit/"+id,
+							url:"/ChiLingualAdmin/lesson/edit/"+id,
 							success:function(data,textStatus){
 								$("#lessonDialogOnCourse").html(data);
 								$("#lessonDialogOnCourse").dialog("open");
@@ -157,7 +150,7 @@
 							
 							});
 						
-						});
+						});*/
 			})
 	</script>
 </body>

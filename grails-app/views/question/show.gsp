@@ -1,57 +1,52 @@
 <!DOCTYPE html>
 <html>
-	<div id="show-question" class="content scaffold-show" role="main">
-		<h1>
-			<g:if
-					test="${questionInstance?.questionNo}">
+<div id="show-question" class="content scaffold-show" role="main">
+	<h1>
+		${questionInstance['questionNo']}.
 
-					${questionInstance.questionNo}. 
+		${questionInstance['questionText']}
+	</h1>
 
-				</g:if> <g:if test="${questionInstance?.questionText}">
+	<g:if test="${flash.message}">
+		<div class="message" role="status">
+			${flash.message}
+		</div>
+	</g:if>
 
-					${questionInstance.questionText}
+	<ol style="list-style-type: upper-alpha;">
+		<g:each in="${questionInstance['answers']}" status="i" var="a">
 
-				</g:if>
-		</h1>
-		
-		<g:if test="${flash.message}">
-			<div class="message" role="status">
-				${flash.message}
-			</div>
-		</g:if>
-		
-		<ol style="list-style-type:upper-alpha;">
-			<g:if test="${questionInstance?.answers}">
-			<g:each in="${questionInstance.answers}" status="i" var="a">
-				 
-				<li class="fieldcontain">
-					<g:if test="${a?.correct}">
-						<b>${a.choice}</b>
+			<li class="fieldcontain">
+			<g:if test="${a!=null}">
+					<!-- If the answer is not null -->
+					<g:if test="${a['correct']}">
+						<b>
+							${a['choice']}
+						</b>
 					</g:if>
-					<g:else>${a.choice}</g:else>
-					
-				</li>	
-			</g:each>
-		</g:if>
-			
-		</ol>
-		<br>
-		
-			<fieldset class="buttons">
-				<a class="editQuestionOnShow" id="${questionInstance.id}">
-					<g:message code="default.button.edit.label" default="Edit" />
-				</a>
-				<g:hiddenField name="lessonId" value="${questionInstance.lesson.id}"/>
-			</fieldset>
-	</div>
+					<g:else>
+						${a['choice']}
+					</g:else>
+				</g:if></li>
+		</g:each>
+
+	</ol>
+	<br>
+
+	<fieldset class="buttons">
+		<a class="editQuestionOnShow"> <g:message
+				code="default.button.edit.label" default="Edit" />
+		</a>
+	</fieldset>
+</div>
 <script>
 $(function(){
 	$(".editQuestionOnShow").click(function(){
-		var id=$(this).prop("id");
 		var position=$("#show-question").parents("div.ui-dialog-content").prop("id");
 		$.ajax({
-			url:"/ChineseWeb/question/edit/"+id,
-			data:{position:position},
+			url:"/ChiLingualAdmin/question/edit/",
+			data:{position:position,questionNo:${questionInstance['questionNo']},
+				lessonNo:${questionInstance['lessonNo']},courseCode:${questionInstance['courseCode']},
 			success:function(data,textStatus){
 					$("#show-question").html(data);
 				},
