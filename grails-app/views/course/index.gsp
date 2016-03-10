@@ -48,7 +48,7 @@
 				<g:each in="${list}" status="i" var="course">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-						<td><g:link action="show" params="[course:"${course['courseCode']}"]">
+						<td><g:link controller="course" action="show" params="[courseCode:"${course['courseCode']}",courseTitle:"${course['courseTitle']}"]">
 								${course['courseTitle']}
 							</g:link></td>
 

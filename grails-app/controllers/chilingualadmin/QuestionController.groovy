@@ -42,7 +42,7 @@ class QuestionController {
 	 * Ajax method for the list page
 	 */
 	def _refreshList(){
-		def response=restClient.get(path:'questions',query:[courseCode:params.courseCode,lessonNo:params.lessonNo],accept: ContentType.JSON)
+		def response=restClient.get(path:'questions/',query:[courseCode:params.courseCode,lessonNo:params.lessonNo],accept: ContentType.JSON)
 		def list=jsonSlurper.parseText(response.getContentAsString())
 		//Assume the response is an arrayList of question objects
 		[list:list,lessonNo:params.lessonNo, courseCode:params.courseCode]
@@ -53,7 +53,7 @@ class QuestionController {
 	 * @return
 	 */
 	def show() {
-		def response=restClient.get(path:"questions",query:[questionNo:params.questionNo,courseCode:params.courseCode,lessonNo:params.lessonNo],accept: ContentType.JSON)
+		def response=restClient.get(path:"questions/",query:[questionNo:params.questionNo,courseCode:params.courseCode,lessonNo:params.lessonNo],accept: ContentType.JSON)
 		println response
 		def question=jsonSlurper.parseText(response.getContentAsString())
 		//Assume the response is a question object which contains an arrayList of five answers
@@ -101,7 +101,7 @@ class QuestionController {
 	def update() {
 		def answerList=[]//a list of maps
 		(0..4).each{
-				def a=[choice:params."${it}",correct:false]
+				def a=[choice:params."${it}",correct:false,answerIndex:it]
 				if(it.toString() in params.correctChecked){
 					a['correct'] = true
 				}

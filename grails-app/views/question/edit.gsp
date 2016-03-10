@@ -13,8 +13,7 @@
 
 	<g:form>
 		<fieldset class="form">
-			<div
-				class="fieldcontain  required">
+			<div class="fieldcontain  required">
 				<label for="questionText"> <g:message
 						code="question.questionText.label" default="Question Text" /> <span
 					class="required-indicator">*</span>
@@ -23,23 +22,28 @@
 					value="${questionInstance['questionText']}" />
 			</div>
 
-			<g:each in="${questionInstance['answers']}" var="answerInstance" status="i">
-			<div class="fieldcontain required">
-			<label for="choice">
-				Choice: 
-			 </label> 
-			 <g:textField name="${i}" value="${answerInstance['choice']}"/>
-			<label  style="margin-left:15px;width:inherit">Correct: </label><g:checkBox name="correctChecked" value="${i}" checked="${answerInstance['correct']}"/>
-			</div>
-			</g:each>
+			<g:each in="${questionInstance['answers']}" var="answerInstance"
+				status="i">
+				
+				<div class="fieldcontain required">
+					<label for="choice"> Choice: </label>
+					<g:textField name="${i}" value="${answerInstance['choice']}" />
+					
+					<label style="margin-left: 15px; width: inherit">Correct: </label>
+					<g:checkBox name="correctChecked" value="${i}"
+						checked="${answerInstance['correct']=='true'}" />
+				</div>
 			
+			</g:each>
+
 			<g:hiddenField name="courseCode" value="${courseCode}" />
 			<g:hiddenField name="lessonNo" value="${lessonNo}" />
-			<g:hiddenField name="questionNo" value="${questionInstance['questionNo']}"/>
+			<g:hiddenField name="questionNo"
+				value="${questionInstance['questionNo']}" />
 		</fieldset>
 		<fieldset class="buttons">
-			<g:submitToRemote controller="question" action="save" update="questionDialog"
-				value="Create" />
+			<g:submitToRemote controller="question" action="save"
+				update="questionDialog" value="Create" />
 		</fieldset>
 	</g:form>
 </div>

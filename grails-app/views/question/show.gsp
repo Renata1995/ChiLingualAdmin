@@ -17,9 +17,9 @@
 		<g:each in="${questionInstance['answers']}" status="i" var="a">
 
 			<li class="fieldcontain">
-			<g:if test="${a!=null}">
+			<g:if test="${a['choice']!=''}">
 					<!-- If the answer is not null -->
-					<g:if test="${a['correct']}">
+					<g:if test="${a['correct']=='true'}">
 						<b>
 							${a['choice']}
 						</b>

@@ -34,7 +34,9 @@
 
 		<g:if test="${flash.message}">
 			<div class="message" role="status">
-				${flash.message}
+				${
+					flash.message
+				}
 			</div>
 		</g:if>
 
@@ -55,50 +57,53 @@
 
 
 		<!-- Lesson Table -->
+		<g:if test="${lessons}">
+			<table id="tableLessons">
 
-		<table id="tableLessons">
+				<thead>
+					<tr>
 
-			<thead>
-				<tr>
+						<th>Lesson Number</th>
 
-					<th>Lesson Number</th>
+						<th>Lesson Title</th>
 
-					<th>Lesson Title</th>
-
-					<th></th>
-
-				</tr>
-			</thead>
-			<tbody>
-				<g:each in="${lessons}" status="i" var="lesson">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-						<td>
-							${lesson['lessonNo']}
-						</td>
-
-						<td><g:link action="show" controller="lesson"
-								id="${lesson['lessonNo']}">
-								${lesson['lessonTitle']}
-							</g:link></td>
-
-						<td>
-							<fieldset class="buttons">
-								<g:remoteLink update="lessonDialogOnCourse" class="edit" params="[lessonNo:"
-									${lesson['lessonNo']}",lessonTitle:"${lesson['lessonTitle']}"]" action="edit"
-									controller="lesson">
-									<g:message code="default.button.edit.label" default="Edit" />
-								</g:remoteLink>
-								<g:link controller="lesson" class="delete" action="delete" params="[lessonNo:"
-									${lesson['lessonNo']}"]" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-									onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-							</fieldset>
-						</td>
+						<th></th>
 
 					</tr>
-				</g:each>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<g:each in="${lessons}" status="i" var="lesson">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+
+							<td>
+								${lesson['lessonNo']}
+							</td>
+
+							<td><g:link action="show" controller="lesson"
+									id="${lesson['lessonNo']}">
+									${lesson['lessonTitle']}
+								</g:link></td>
+
+							<td>
+								<fieldset class="buttons">
+									<g:remoteLink update="lessonDialogOnCourse" class="edit"
+										params="[lessonNo:"
+										${lesson['lessonNo']}",lessonTitle:"${lesson['lessonTitle']}"]" action="edit"
+										controller="lesson">
+										<g:message code="default.button.edit.label" default="Edit" />
+									</g:remoteLink>
+									<g:link controller="lesson" class="delete" action="delete"
+										params="[lessonNo:"
+										${lesson['lessonNo']}"]" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+										onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+								</fieldset>
+							</td>
+
+						</tr>
+					</g:each>
+				</tbody>
+			</table>
+		</g:if>
 
 
 		<div id="lessonDialogOnCourse"></div>
@@ -110,7 +115,8 @@
 				controller="course">
 				<g:message code="default.button.edit.label" default="Edit" />
 			</g:link>
-			<g:link controller="course" class="delete" action="delete" params="[courseCode:"
+			<g:link controller="course" class="delete" action="delete"
+				params="[courseCode:"
 				${course['courseCode']}"]" value="${message(code: 'default.button.delete.label', default: 'Delete')}"
 				onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 		</fieldset>

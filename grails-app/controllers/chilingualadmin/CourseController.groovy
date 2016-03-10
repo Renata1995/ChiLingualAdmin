@@ -35,12 +35,11 @@ class CourseController {
 	def show() {
 		String username=springSecurityService.currentUser.username
 		def courseCode=params.courseCode
-		def course
-		def response=restClient.get(path:"courses",query:[adminEmail:username,courseCode:courseCode],accept: ContentType.JSON)
+		def response=restClient.get(path:"courses/lessons",query:[courseCode:courseCode],accept: ContentType.JSON)
 		println response
-		course=jsonSlurper.parseText(response.getContentAsString())
+		def lessons=jsonSlurper.parseText(response.getContentAsString())
 		//Assume the response is a map: [course:course,lessons:lessons(an arrayList of lessons)]
-		model: course
+		[courseCode:courseCode,courseTitle:params.courseTitle,lessons:lessons]
 
 	}
 	/**
@@ -48,7 +47,6 @@ class CourseController {
 	 * @return
 	 */
 	def create() {
-
 	}
 
 	/**
@@ -61,7 +59,7 @@ class CourseController {
 			urlenc courseTitle:params.courseTitle,courseCode:params.courseCode,adminEmail:username
 		}
 		def courseAPI=jsonSlurper.parseText(response.getContentAsString())
-		//Assume the response is a map: [course:course,lessons:lessons(an arrayList of lessons)]
+		//Assume the response is a course object
 		render view:"show",model:courseAPI
 
 	}
@@ -79,12 +77,13 @@ class CourseController {
 	 */
 	def update() {
 		def username=springSecurityService.currentUser.username
-		def response=restClient.put(path:'courses'){
-			urlenc courseTitle:params.courseTitle,courseCode:params.courseCode,adminEmail:username
+		def courseCode=params.courseCode;
+		def response=restClient.put(path:'courses/${courseCode}'){
+			urlenc courseTitle:params.courseTitle,adminEmail:username
 		}
 		flash.message = "Course ${courseCode} is updated."
 		def courseAPI=jsonSlurper.parseText(response.getContentAsString())
-		//Assume the response is a map: [course:course,lessons:lessons(an arrayList of lessons)]
+		//Assume the response is a course object
 		render view:"show",model:courseAPI
 	}
 
@@ -95,7 +94,7 @@ class CourseController {
 	def delete() {
 		def username=springSecurityService.currentUser.username
 		def courseCode=params.courseCode
-		def response=restClient.delete(path:"courses",query:[courseCode:courseCode,adminEmail:username],accept: ContentType.JSON)
+		def response=restClient.delete(path:"courses/${courseCode}",query:[adminEmail:username],accept: ContentType.JSON)
 		def list=jsonSlurper.parseText(response.getContentAsString())
 		flash.message = "Course ${courseCode} is deleted."
 		//Assume the response is an arrayList of course objects
